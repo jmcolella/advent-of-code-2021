@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"main/dayOne"
+)
 
 func main() {
-	fmt.Println("hello world")
+	err := dayOne.New().Run()
+	if err != nil {
+		fmt.Printf(err.Error())
+	}
 }
