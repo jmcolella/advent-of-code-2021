@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"main/dayFour"
+	"main/dayFive"
 )
 
 func main() {
@@ -12,7 +12,9 @@ func main() {
 
 	// err := dayThree.New().Run()
 
-	err := dayFour.New().Run()
+	// err := dayFour.New().Run()
+
+	err := dayFive.New().Run()
 
 	if err != nil {
 		fmt.Printf(err.Error())
