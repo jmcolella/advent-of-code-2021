@@ -25,103 +25,73 @@ func initialSchool(records []string) ([]int64, error) {
 }
 
 func partOne(school []int64) []int64 {
+	copySchool := school
 	maxDays := 80
 	dayCount := 0
 
 	for dayCount < maxDays {
 		fmt.Printf("Day Count %v\n", dayCount)
-		for idx, fish := range school {
+		for idx, fish := range copySchool {
 			nextFish := fish - 1
 
 			if nextFish < 0 {
-				school[idx] = 6
+				copySchool[idx] = 6
 
-				school = append(school, 8)
+				copySchool = append(copySchool, 8)
 
 				continue
 			}
 
-			school[idx] = fish - 1
+			copySchool[idx] = fish - 1
 		}
 
 		dayCount++
 	}
 
-	return school
+	return copySchool
 }
 
 func partTwo(school []int64) int {
-	maxDays := 2
+	maxDays := 256
 	dayCount := 0
-	var thing = map[int64]int{}
+	var fishCounts = map[int64]int{}
 
 	var timer int64
 	timer = 0
 
 	for timer < 9 {
-		thing[timer] = 0
+		fishCounts[timer] = 0
 
 		timer++
 	}
 
 	for _, s := range school {
-		thing[s] += 1
+		fishCounts[s] += 1
 	}
 
 	for dayCount < maxDays {
-		fmt.Printf("day count %v\n", dayCount)
-		fmt.Printf("thing map %v\n", thing)
+		nextFish := fishCounts[0]
 
-		// var changeThing = map[int64]int{}
-
-		for k := range thing {
-			modEight := dayCount % 8
-			// changeThing[k] = 0
-			times := thing[k]
-
-			if modEight == 0 && k == 8 && times > 0 {
-				thing[6] += times
-				thing[8] -= times
-			} else if k == 0 && times > 0 {
-				thing[6] += times
-				thing[8] += times
-				thing[0] -= times
-			} else if times != 0 {
-				fmt.Printf("k %v\n", k)
-
-				thing[k] -= times
-				thing[k-1] += times
-
-				if thing[k] < 0 {
-					thing[k] = 0
-				}
-
-				// fmt.Printf("change thing map %v\n", changeThing)
-
-			}
-		}
-
-		// fmt.Printf("change thing map after change %v\n", changeThing)
-
-		// for k, v := range changeThing {
-		// 	thing[k]["Times"] = v
-		// }
-
-		fmt.Printf("thing map after change %v\n", thing)
+		fishCounts[0] = fishCounts[1]
+		fishCounts[1] = fishCounts[2]
+		fishCounts[2] = fishCounts[3]
+		fishCounts[3] = fishCounts[4]
+		fishCounts[4] = fishCounts[5]
+		fishCounts[5] = fishCounts[6]
+		fishCounts[6] = fishCounts[7] + nextFish
+		fishCounts[7] = fishCounts[8]
+		fishCounts[8] = nextFish
 
 		dayCount++
-
 	}
 
-	fmt.Printf("thing map after %v\n", thing)
+	val := 0
 
-	// val := 0
+	for _, v := range fishCounts {
+		val += v
+	}
 
-	// for _, v := range thing {
-	// 	val += v["Times"] * v["NewFish"]
-	// }
-
-	return 0
+	return val
 }
 
 func (d *DaySix) Run() error {
@@ -135,13 +105,13 @@ func (d *DaySix) Run() error {
 		return err
 	}
 
-	// finalSchool := partOne(school)
+	finalSchool := partOne(school)
 
-	// fmt.Printf("Final school Part One %v\n", len(finalSchool))
+	fmt.Printf("Final school Part One %v\n", len(finalSchool))
 
-	finalSchool := partTwo(school)
+	infiniteSchoolVal := partTwo(school)
 
-	fmt.Printf("Final school Part Two %v\n", finalSchool)
+	fmt.Printf("Final school Part Two %v\n", infiniteSchoolVal)
 
 	return nil
 }
