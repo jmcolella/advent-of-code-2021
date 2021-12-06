@@ -45,54 +45,25 @@ func makeLineCoordinates(records []string) ([][][]int64, int64, error) {
 		xEnd := x2
 
 		yCount := y1
-		yStart := y1
 		yEnd := y2
 
-		if x1 != x2 && y1 != y2 {
-			for xCount != xEnd && yCount != yEnd {
-				row = append(row, []int64{xCount, yCount})
-
-				if y2 > y1 {
-					yCount++
-				} else if y1 > y2 {
-					yCount--
-				}
-
-				if x2 > x1 {
-					xCount++
-				} else if x1 > x2 {
-					xCount--
-				}
-			}
-
+		for xCount != xEnd || yCount != yEnd {
 			row = append(row, []int64{xCount, yCount})
 
-			coords = append(coords, row)
-
-			continue
-		}
-
-		if x2 < x1 {
-			xCount = x2
-			xEnd = x1
-		}
-
-		if y2 < y1 {
-			yCount = y2
-			yStart = y2
-			yEnd = y1
-		}
-
-		for xCount <= xEnd {
-			for yCount <= yEnd {
-				row = append(row, []int64{xCount, yCount})
-
+			if y2 > y1 {
 				yCount++
+			} else if y1 > y2 {
+				yCount--
 			}
 
-			yCount = yStart
-			xCount++
+			if x2 > x1 {
+				xCount++
+			} else if x1 > x2 {
+				xCount--
+			}
 		}
+
+		row = append(row, []int64{xCount, yCount})
 
 		coords = append(coords, row)
 	}
