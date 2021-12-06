@@ -50,44 +50,78 @@ func partOne(school []int64) []int64 {
 	return school
 }
 
-func partTwo(school []int64) []int64 {
-	maxDays := 80
+func partTwo(school []int64) int {
+	maxDays := 2
 	dayCount := 0
-	newFish := []int64{}
+	var thing = map[int64]int{}
+
+	var timer int64
+	timer = 0
+
+	for timer < 9 {
+		thing[timer] = 0
+
+		timer++
+	}
+
+	for _, s := range school {
+		thing[s] += 1
+	}
 
 	for dayCount < maxDays {
-		fmt.Printf("Day Count %v\n", dayCount)
-		for idx, fish := range school {
-			nextFish := fish - 1
+		fmt.Printf("day count %v\n", dayCount)
+		fmt.Printf("thing map %v\n", thing)
 
-			if nextFish < 0 {
-				school[idx] = 6
+		// var changeThing = map[int64]int{}
 
-				newFish = append(newFish, 8)
+		for k := range thing {
+			modEight := dayCount % 8
+			// changeThing[k] = 0
+			times := thing[k]
 
-				continue
+			if modEight == 0 && k == 8 && times > 0 {
+				thing[6] += times
+				thing[8] -= times
+			} else if k == 0 && times > 0 {
+				thing[6] += times
+				thing[8] += times
+				thing[0] -= times
+			} else if times != 0 {
+				fmt.Printf("k %v\n", k)
+
+				thing[k] -= times
+				thing[k-1] += times
+
+				if thing[k] < 0 {
+					thing[k] = 0
+				}
+
+				// fmt.Printf("change thing map %v\n", changeThing)
+
 			}
-
-			school[idx] = fish - 1
 		}
 
+		// fmt.Printf("change thing map after change %v\n", changeThing)
+
+		// for k, v := range changeThing {
+		// 	thing[k]["Times"] = v
+		// }
+
+		fmt.Printf("thing map after change %v\n", thing)
+
 		dayCount++
+
 	}
 
-	dayCount = 0
+	fmt.Printf("thing map after %v\n", thing)
 
-	for dayCount < (maxDays / 8) {
-		nextFish := make([]int64, len(newFish))
-		newFish = append(newFish, nextFish...)
+	// val := 0
 
-		dayCount++
-	}
+	// for _, v := range thing {
+	// 	val += v["Times"] * v["NewFish"]
+	// }
 
-	fmt.Printf("new fish %v\n", len(newFish))
-
-	school = append(school, newFish...)
-
-	return school
+	return 0
 }
 
 func (d *DaySix) Run() error {
@@ -101,13 +135,13 @@ func (d *DaySix) Run() error {
 		return err
 	}
 
-	finalSchool := partOne(school)
+	// finalSchool := partOne(school)
 
-	fmt.Printf("Final school Part One %v\n", len(finalSchool))
+	// fmt.Printf("Final school Part One %v\n", len(finalSchool))
 
-	finalSchool = partTwo(school)
+	finalSchool := partTwo(school)
 
-	fmt.Printf("Final school Part Two %v\n", len(finalSchool))
+	fmt.Printf("Final school Part Two %v\n", finalSchool)
 
 	return nil
 }
