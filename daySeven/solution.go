@@ -58,6 +58,38 @@ func partOne(positions []int) int {
 	return fuel
 }
 
+func partOneMode(positions []int) int {
+	posFreqs := make(map[int]int)
+
+	for _, p := range positions {
+		if posFreqs[p] != 0 {
+			posFreqs[p] += 1
+		} else {
+			posFreqs[p] = 1
+		}
+	}
+
+	mode := 0
+	mostFreq := 0
+
+	for k, v := range posFreqs {
+		if v > mostFreq {
+			mostFreq = v
+			mode = k
+		}
+	}
+
+	fuel := 0
+
+	for _, p := range positions {
+		f := float64(p - mode)
+
+		fuel += int(math.Abs(f))
+	}
+
+	return fuel
+}
+
 func partTwo(positions []int) int {
 	posFreqs := make(map[int]int)
 
@@ -94,9 +126,29 @@ func partTwo(positions []int) int {
 
 		if fuel == 0 {
 			fuel = checkFuel
-		} else if fuel > checkFuel {
-			fuel = checkFuel
+		} else {
+			fuel = int(math.Min(float64(fuel), float64(checkFuel)))
 		}
+	}
+
+	return fuel
+}
+
+func partTwoMean(positions []int) int {
+	total := 0
+
+	for _, p := range positions {
+		total += p
+	}
+
+	mean := math.Ceil(float64(total) / float64(len(positions)))
+
+	fuel := 0
+
+	for _, p := range positions {
+		d := int(math.Abs(float64(float64(p) - mean)))
+
+		fuel += ((d * (d + 1)) / 2)
 	}
 
 	return fuel
@@ -126,10 +178,20 @@ func (d *DaySeven) Run() error {
 	fmt.Printf("Part One TEST %v\n", lowestFuelTest)
 	fmt.Printf("Part One INPUT %v\n", lowestFuel)
 
+	lowestFuelTest = partOneMode(testPositions)
+	lowestFuel = partOneMode(positions)
+	fmt.Printf("Part One TEST Mode %v\n", lowestFuelTest)
+	fmt.Printf("Part One INPUT Mode %v\n", lowestFuel)
+
 	lowestFuelTest = partTwo(testPositions)
 	lowestFuel = partTwo(positions)
 	fmt.Printf("Part Two TEST %v\n", lowestFuelTest)
 	fmt.Printf("Part Two INPUT %v\n", lowestFuel)
+
+	lowestFuelTest = partTwoMean(testPositions)
+	lowestFuel = partTwoMean(positions)
+	fmt.Printf("Part Two TEST Mean %v\n", lowestFuelTest)
+	fmt.Printf("Part Two INPUT Mean %v\n", lowestFuel)
 
 	return nil
 }
