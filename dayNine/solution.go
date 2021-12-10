@@ -272,6 +272,10 @@ func partTwo(points [][]int) int {
 
 	fmt.Printf("lowPoints %v\n", lowPoints)
 
+	// for _, lp := range lowPoints {
+
+	// }
+
 	risk := 0
 
 	// for _, lp := range lowPoints {
